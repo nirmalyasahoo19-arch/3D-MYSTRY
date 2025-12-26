@@ -4,7 +4,7 @@ import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/
 
 // Scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1e1e1e);
+scene.background = new THREE.Color(0x111111);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(
@@ -24,25 +24,22 @@ document.body.appendChild(renderer.domElement);
 // Lights
 scene.add(new THREE.AmbientLight(0xffffff, 1));
 
-const dirLight = new THREE.DirectionalLight(0xffffff, 2);
-dirLight.position.set(5, 10, 7);
-scene.add(dirLight);
+const light = new THREE.DirectionalLight(0xffffff, 2);
+light.position.set(5, 10, 7);
+scene.add(light);
 
 // Controls
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-// Helpers (optional but useful)
-scene.add(new THREE.AxesHelper(1));
-
-// Load GLB model
+// Load model
 const loader = new GLTFLoader();
 loader.load(
   './model.glb',
   (gltf) => {
     const model = gltf.scene;
 
-    // Auto-center & auto-scale
+    // Auto center & scale
     const box = new THREE.Box3().setFromObject(model);
     const size = box.getSize(new THREE.Vector3()).length();
     const center = box.getCenter(new THREE.Vector3());
@@ -54,11 +51,11 @@ loader.load(
   },
   undefined,
   (error) => {
-    console.error('Error loading model:', error);
+    console.error('Model load error:', error);
   }
 );
 
-// Animation loop
+// Animate
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
@@ -66,7 +63,7 @@ function animate() {
 }
 animate();
 
-// Resize handling
+// Resize
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
